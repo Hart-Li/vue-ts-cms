@@ -1,5 +1,5 @@
 <template>
-  <div>Index</div>
+  <div>ListView</div>
 </template>
 
 <script lang="ts">
