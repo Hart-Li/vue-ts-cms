@@ -38,7 +38,7 @@ router.beforeEach((to) => {
     }
   }
 
-  if (to.path === '/main') {
+  if (to.path === '/main' && firstMenu) {
     return firstMenu.url
   }
 })

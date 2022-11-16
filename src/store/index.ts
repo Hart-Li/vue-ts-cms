@@ -1,11 +1,12 @@
 import { createStore } from 'vuex'
 
-import { IRootStore } from './types'
+import { IRootState, IStoreType } from './types'
 
 import UserModule from '@/store/user/user'
+import SystemModule from '@/store/main/system/system'
 import localCache from '@/utils/cache'
 
-const store = createStore<IRootStore>({
+const store = createStore<IRootState>({
   state: () => {
     return {
       title: '测试标题'
@@ -15,7 +16,8 @@ const store = createStore<IRootStore>({
   actions: {},
   getters: {},
   modules: {
-    UserModule
+    UserModule,
+    SystemModule
   }
 })
 

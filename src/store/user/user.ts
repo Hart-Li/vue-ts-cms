@@ -1,6 +1,6 @@
 import { Module } from 'vuex'
 import { UserState } from '@/store/user/types'
-import { IRootStore } from '@/store/types'
+import { IRootState } from '@/store/types'
 import {
   accountLoginRequest,
   getUserById,
@@ -11,7 +11,7 @@ import localCache from '@/utils/cache'
 import router from '@/router'
 import { mapMenusToRoutes } from '@/utils/map-menus'
 
-const UserModule: Module<UserState, IRootStore> = {
+const UserModule: Module<UserState, IRootState> = {
   state: () => {
     return {
       token: '',
