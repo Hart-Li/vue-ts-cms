@@ -4,10 +4,15 @@
     <div class="content">
       <custom-table :props-list="props" :list-data="userList">
         <template #enable="scope">
-          <el-button> {{ scope.row.enable ? '启用' : '禁用' }}</el-button>
+          <el-button
+            size="small"
+            :type="scope.row.enable ? 'success' : 'danger'"
+          >
+            {{ scope.row.enable ? '启用' : '禁用' }}
+          </el-button>
         </template>
         <template #createAt="scope">
-          {{ scope.row.createAt }}
+          {{ $filters.formatTime(scope.row.createAt) }}
         </template>
       </custom-table>
     </div>
