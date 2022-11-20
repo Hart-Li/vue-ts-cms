@@ -7,3 +7,7 @@ export function getPageListData(url: string, params: any) {
     params: params
   })
 }
+
+export function deletePageData(url: string) {
+  return commonRequest.delete<ResponseData>({ url: url })
+}

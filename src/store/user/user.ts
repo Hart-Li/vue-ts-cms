@@ -9,14 +9,16 @@ import {
 import { UserInfo } from '@/service/user/types'
 import localCache from '@/utils/cache'
 import router from '@/router'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
+import { deletePageData } from '@/service/main/system/system'
 
 const UserModule: Module<UserState, IRootState> = {
   state: () => {
     return {
       token: '',
       userInfo: {},
-      userMenus: {}
+      userMenus: {},
+      permissions: []
     }
   },
   mutations: {
@@ -32,6 +34,9 @@ const UserModule: Module<UserState, IRootState> = {
       for (const route of routes) {
         router.addRoute('main', route)
       }
+
+      const permissions = mapMenusToPermissions(userMenus)
+      state.permissions = permissions
     }
   },
   actions: {
@@ -47,7 +52,6 @@ const UserModule: Module<UserState, IRootState> = {
       localCache.setCache('userInfo', userInfo)
       // 请求获取用户的菜单列表
       const userMenusResult = await getMenusByRoleId(userInfo.role.id)
-      console.log(userMenusResult)
       const userMenus = userMenusResult.data
       commit('changeUserMenus', userMenus)
       localCache.setCache('userMenus', userMenus)

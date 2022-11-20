@@ -14,6 +14,7 @@
         :data="listData"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        v-bind="childrenProps"
       >
         <el-table-column
           v-if="showSelectionColumn"
@@ -39,7 +40,7 @@
         </template>
       </el-table>
     </div>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <el-pagination
         :page-sizes="[10, 20, 50, 100]"
         layout="total, sizes, prev, pager, next, jumper"
@@ -85,6 +86,14 @@ export default defineComponent({
     page: {
       type: Object,
       default: () => ({ currentPage: 1, pageSize: 10 })
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['selectionChange', 'update:page'],

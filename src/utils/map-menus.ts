@@ -3,6 +3,7 @@ import { IBreadcrumb } from '@/base-ui/breadcrumb/types'
 
 let firstMenu: any = null
 
+// 将菜单数据加入到总路由中 type=1 or type=2
 export function mapMenusToRoutes(menus: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
   // 1.加载默认的所有的 routes
@@ -36,6 +37,7 @@ export function mapMenusToRoutes(menus: any[]): RouteRecordRaw[] {
   return routes
 }
 
+// 将路径转为对应的菜单用于面包屑展示
 export function pathMapToBreadcrumbs(userMenus: any[], currentPath: string) {
   const breadcrumbs: IBreadcrumb[] = []
   pathMapToMenu(userMenus, currentPath, breadcrumbs)
@@ -59,6 +61,22 @@ export function pathMapToMenu(
       return userMenu
     }
   }
+}
+
+// 将菜单转为权限 type=3
+export function mapMenusToPermissions(userMenus: any[]) {
+  const permissions: string[] = []
+  const _recurseGetPermissions = (userMenus: any[]) => {
+    for (const userMenu of userMenus) {
+      if (userMenu.type === 1 || userMenu.type === 2) {
+        _recurseGetPermissions(userMenu.children ?? [])
+      } else if (userMenu.type === 3) {
+        permissions.push(userMenu.permission)
+      }
+    }
+  }
+  _recurseGetPermissions(userMenus)
+  return permissions
 }
 
 export { firstMenu }

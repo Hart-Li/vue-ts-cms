@@ -14,14 +14,26 @@
       <template #createAt="scope">
         {{ $filters.formatTime(scope.row.createAt) }}
       </template>
-      <template #handlerBtns>
-        <el-button text link style="color: #64b2fe">
+      <template #handlerBtns="scope" v-if="isUpdate || isDelete">
+        <el-button
+          text
+          link
+          style="color: #64b2fe"
+          v-if="isUpdate"
+          @click="handleEditClick(scope.row)"
+        >
           <el-icon>
             <Edit />
           </el-icon>
           编辑
         </el-button>
-        <el-button text link style="color: #64b2fe">
+        <el-button
+          text
+          link
+          style="color: #64b2fe"
+          v-if="isDelete"
+          @click="handleDeleteClick(scope.row)"
+        >
           <el-icon>
             <Delete />
           </el-icon>
@@ -29,7 +41,7 @@
         </el-button>
       </template>
       <template #headerHandler>
-        <el-button type="primary">
+        <el-button type="primary" v-if="isCreate" @click="handleInsertClick">
           <el-icon>
             <CirclePlus />
           </el-icon>
@@ -53,6 +65,7 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import CustomTable from '@/base-ui/table'
 import { useStore } from 'vuex'
+import { userPermission } from '@/hooks/userPermission'
 
 export default defineComponent({
   props: {
@@ -66,11 +79,19 @@ export default defineComponent({
     }
   },
   components: { CustomTable },
-  setup(props) {
+  emits: ['handleInsertClick', 'handleEditClick'],
+  setup(props, { emit }) {
     const store = useStore()
+
+    const isCreate = userPermission(props.pageName, 'create')
+    const isUpdate = userPermission(props.pageName, 'update')
+    const isDelete = userPermission(props.pageName, 'delete')
+    const isQuery = userPermission(props.pageName, 'query')
+
     const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     watch(pageInfo, () => getContentData())
     const getContentData = (queryData: any = {}) => {
+      if (!isQuery) return
       store.dispatch('getPageListAction', {
         pageName: props.pageName,
         queryParams: {
@@ -89,13 +110,31 @@ export default defineComponent({
         return true
       }
     )
-    console.log(otherPropSlots)
+    const handleDeleteClick = (rowData: any) => {
+      store.dispatch('deletePageDataAction', {
+        pageName: props.pageName,
+        id: rowData.id
+      })
+    }
+    const handleInsertClick = () => {
+      emit('handleInsertClick')
+    }
+    const handleEditClick = (rowData: any) => {
+      emit('handleEditClick', rowData)
+    }
     return {
       dataList,
       dataCount,
       getContentData,
       pageInfo,
-      otherPropSlots
+      otherPropSlots,
+      isCreate,
+      isUpdate,
+      isDelete,
+      isQuery,
+      handleDeleteClick,
+      handleInsertClick,
+      handleEditClick
     }
   }
 })
