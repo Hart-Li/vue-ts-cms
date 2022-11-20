@@ -6,24 +6,26 @@ import { getPageListData } from '@/service/main/system/system'
 const SystemModule: Module<ISystemState, IRootState> = {
   state() {
     return {
-      userList: [],
-      userCount: 0
+      dataList: [],
+      dataCount: 0
     }
   },
   actions: {
     async getPageListAction({ commit }, payload) {
-      const data = await getPageListData(payload.pageUrl, payload.queryParams)
+      const pageName = payload.pageName
+      const pageUrl = `/${pageName}/list`
+      const data = await getPageListData(pageUrl, payload.queryParams)
       const { list, totalCount } = data.data
-      commit('changeUserList', list)
-      commit('changeUserCount', totalCount)
+      commit('changeDataList', list)
+      commit('changeDataCount', totalCount)
     }
   },
   mutations: {
-    changeUserList(state, userList) {
-      state.userList = userList
+    changeDataList(state, dataList) {
+      state.dataList = dataList
     },
-    changeUserCount(state, userCount) {
-      state.userCount = userCount
+    changeDataCount(state, dataCount) {
+      state.dataCount = dataCount
     }
   }
 }

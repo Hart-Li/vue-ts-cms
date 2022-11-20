@@ -6,8 +6,10 @@
       </template>
       <template #footer>
         <div class="footer">
-          <el-button size="large">重置</el-button>
-          <el-button type="primary" size="large">搜索</el-button>
+          <el-button size="large" @click="handleResetClick">重置</el-button>
+          <el-button type="primary" size="large" @click="handleSearchClick"
+            >搜索
+          </el-button>
         </div>
       </template>
     </search-form>
@@ -28,17 +30,25 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
-    const formData = ref({
-      id: '',
-      name: '',
-      actualName: '',
-      mobile: '',
-      status: '',
-      createTime: ''
-    })
+  emits: ['handleResetClick', 'handleSearchClick'],
+  setup(props, { emit }) {
+    const formItems = props.searchFormConfig?.formItems ?? []
+    const formOriginData: any = {}
+    for (const item of formItems) {
+      formOriginData[item.field] = ''
+    }
+    const formData = ref(formOriginData)
+    const handleResetClick = () => {
+      formData.value = formOriginData
+      emit('handleResetClick')
+    }
+    const handleSearchClick = () => {
+      emit('handleSearchClick', formData.value)
+    }
     return {
-      formData
+      formData,
+      handleResetClick,
+      handleSearchClick
     }
   }
 })
