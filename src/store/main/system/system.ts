@@ -1,7 +1,12 @@
 import { Module } from 'vuex'
 import { ISystemState } from '@/store/main/system/types'
 import { IRootState } from '@/store/types'
-import { deletePageData, getPageListData } from '@/service/main/system/system'
+import {
+  deletePageData,
+  getPageListData,
+  createPageData,
+  editPageData
+} from '@/service/main/system/system'
 
 const SystemModule: Module<ISystemState, IRootState> = {
   state() {
@@ -14,7 +19,7 @@ const SystemModule: Module<ISystemState, IRootState> = {
     async getPageListAction({ commit }, payload) {
       const pageName = payload.pageName
       const pageUrl = `/${pageName}/list`
-      const data = await getPageListData(pageUrl, payload.queryParams)
+      const data = await getPageListData(pageUrl, payload.params)
       const { list, totalCount } = data.data
       commit('changeDataList', list)
       commit('changeDataCount', totalCount)
@@ -22,11 +27,28 @@ const SystemModule: Module<ISystemState, IRootState> = {
     async deletePageDataAction({ dispatch }, payload) {
       const { pageName, id } = payload
       const url = `/${pageName}/${id}`
-      console.log(url)
       await deletePageData(url)
       dispatch('getPageListAction', {
         pageName,
-        queryParams: { offset: 0, size: 10 }
+        params: { offset: 0, size: 10 }
+      })
+    },
+    async createPageDataAction({ dispatch }, payload) {
+      const { pageName, pageData } = payload
+      const url = `/${pageName}`
+      await createPageData(url, pageData)
+      dispatch('getPageListAction', {
+        pageName,
+        params: { offset: 0, size: 10 }
+      })
+    },
+    async editPageDataAction({ dispatch }, payload) {
+      const { pageName, id, pageData } = payload
+      const url = `/${pageName}/${id}`
+      await editPageData(url, pageData)
+      dispatch('getPageListAction', {
+        pageName,
+        params: { offset: 0, size: 10 }
       })
     }
   },

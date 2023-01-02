@@ -1,12 +1,12 @@
 import { Module } from 'vuex'
-import { UserState } from '@/store/user/types'
+import { UserState } from '@/store/login/types'
 import { IRootState } from '@/store/types'
 import {
   accountLoginRequest,
   getUserById,
   getMenusByRoleId
-} from '@/service/user/user'
-import { UserInfo } from '@/service/user/types'
+} from '@/service/login/login'
+import { UserInfo } from '@/service/login/types'
 import localCache from '@/utils/cache'
 import router from '@/router'
 import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
@@ -40,11 +40,13 @@ const UserModule: Module<UserState, IRootState> = {
     }
   },
   actions: {
-    async loginAction({ commit }, payload: any) {
+    async loginAction({ commit, dispatch }, payload: any) {
       const loginResult = await accountLoginRequest(payload)
       const token = loginResult.data.token
       commit('changeToken', token)
       localCache.setCache('token', token)
+      // 发送初始化请求
+      dispatch('getInitialDataAction', null, { root: true })
       // 请求获取用户信息
       const userResult = await getUserById(loginResult.data.id)
       const userInfo = userResult.data

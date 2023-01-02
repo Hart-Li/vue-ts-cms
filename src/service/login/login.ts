@@ -1,5 +1,9 @@
 import commonRequest from '@/service'
-import { AccountData, AccountLoginResult, UserInfo } from '@/service/user/types'
+import {
+  AccountData,
+  AccountLoginResult,
+  UserInfo
+} from '@/service/login/types'
 import { ResponseData } from '@/service/config/types'
 
 enum UserApi {

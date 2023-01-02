@@ -13,11 +13,12 @@ export interface IFormItem {
   placeholder?: string
   options?: IFormOptions[]
   otherOptions?: any
+  isHidden?: boolean
 }
 
 export interface IForm {
   formItems: IFormItem[]
   labelWidth?: string
   itemStyle?: any
-  itemLayout?: any
+  colLayout?: any
 }

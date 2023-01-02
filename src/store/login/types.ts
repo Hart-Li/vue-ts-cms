@@ -1,4 +1,4 @@
-import { UserInfo } from '@/service/user/types'
+import { UserInfo } from '@/service/login/types'
 
 export interface UserState {
   token: string

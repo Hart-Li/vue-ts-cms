@@ -1,7 +1,10 @@
-import { UserState } from '@/store/user/types'
+import { UserState } from '@/store/login/types'
 
 export interface IRootState {
   title: string
+  entireDepartment: any[]
+  entireRole: any[]
+  entireMenu: any[]
 }
 
 export interface IRootWithModule {
