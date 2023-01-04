@@ -10,7 +10,6 @@ import { UserInfo } from '@/service/login/types'
 import localCache from '@/utils/cache'
 import router from '@/router'
 import { mapMenusToPermissions, mapMenusToRoutes } from '@/utils/map-menus'
-import { deletePageData } from '@/service/main/system/system'
 
 const UserModule: Module<UserState, IRootState> = {
   state: () => {

@@ -7,7 +7,6 @@ import store, { setupStore } from '@/store'
 import 'normalize.css'
 import '@/assets/css/index.less'
 
-import commonRequest from '@/service'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import { registerApp } from '@/global'
